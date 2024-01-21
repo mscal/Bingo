@@ -7,7 +7,7 @@ export default function Layout({ children }: { children: ReactElement }) {
       height={"100vh"}
       alignItems={"center"}
       justifyContent={"center"}
-      bg={"red.400"}
+      bg={"black"}
     >
       {children}
     </Flex>

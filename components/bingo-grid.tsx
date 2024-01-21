@@ -1,10 +1,17 @@
 import { Button, Grid, Stack } from "@chakra-ui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import ClearBoardDialog from "./clear-board-dialog";
+import ShareBoard from "./share-board";
 import Tile from "./tile";
 import WelcomeMessage from "./welcome-message";
-import ClearBoardDialog from "./clear-board-dialog";
+import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/router";
 
 const BingoGrid = () => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const share = searchParams.get("share");
+
   //initial setup
   const initialGrid = Array(25).fill(undefined);
   initialGrid[12] = "Free";
@@ -18,6 +25,16 @@ const BingoGrid = () => {
   function areTilesSelected() {
     return selectedState.some((selected) => selected === true);
   }
+
+  useEffect(() => {
+    if (share) {
+      const parsedJson = JSON.parse(share);
+      if (parsedJson) {
+        setAllNumbers(parsedJson?.numberState || initialGrid);
+        setSelectedState(parsedJson?.selectionState || Array(25).fill(false));
+      }
+    }
+  }, [share]);
 
   //Generates new set of numbers & updates grid list
   function generateNumbers(gridItems: number) {
@@ -35,7 +52,6 @@ const BingoGrid = () => {
       }
       return item;
     });
-
     setAllNumbers(updatedGrid);
   }
 
@@ -50,9 +66,8 @@ const BingoGrid = () => {
   function handleClear() {
     setSelectedState(Array(25).fill(false));
     generateNumbers(24);
+    router.replace("/bingo-game", undefined, { shallow: true });
   }
-
-  function shareBoard() {}
 
   return (
     <Stack>
@@ -74,7 +89,7 @@ const BingoGrid = () => {
               tileValue={item}
               selected={selectedState[index]}
               onTileClick={() => handleTileClick(index)}
-              key={item}
+              key={index}
             />
           );
         })}
@@ -84,8 +99,10 @@ const BingoGrid = () => {
       ) : (
         <Button onClick={() => generateNumbers(24)}>Generate Numbers</Button>
       )}
-
-      <Button onClick={() => shareBoard()}>Share Bingo Board</Button>
+      <ShareBoard
+        numberState={allNumbers}
+        selectionState={selectedState}
+      />
     </Stack>
   );
 };
