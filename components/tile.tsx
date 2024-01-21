@@ -9,7 +9,7 @@ export default function Tile({
   selected: boolean;
   onTileClick: () => void;
 }) {
-  const free = tileValue === "Free";
+  const free = tileValue === "FREE";
 
   return (
     <GridItem
@@ -17,11 +17,11 @@ export default function Tile({
       display={"flex"}
       alignItems={"center"}
       justifyContent={"center"}
-      color={selected || free ? "black" : "white"}
+      color={selected ? "black" : "white"}
       borderRadius={"5px"}
       key={tileValue}
       onClick={onTileClick}
-      bg={selected || free ? "white" : "initial"}
+      bg={selected ? "white" : "initial"}
       cursor={"pointer"}
     >
       {tileValue}

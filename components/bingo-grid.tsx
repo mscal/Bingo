@@ -17,7 +17,7 @@ const BingoGrid = () => {
 
   //initial setup
   const initialGrid = Array(25).fill(undefined);
-  initialGrid[12] = "Free";
+  initialGrid[12] = "FREE";
 
   //initial grid numbers
   const [allNumbers, setAllNumbers] = useState(initialGrid);
