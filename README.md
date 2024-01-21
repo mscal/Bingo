@@ -6,9 +6,16 @@ View the Deployed Project here - On Vercel
 
 ## Getting Started
 
-First, run the development server:
+First, install packages then run the development server:
 
 ```bash
+npm install
+#or
+yarn install
+#or
+pnpm install
+
+---------------
 
 npm run dev
 # or
