@@ -2,7 +2,7 @@ Bingo APP with NextJS + Chakra UI
 
 View the Deployed Project here - On Vercel
 
-[Bingo](https://bingo-two-lime.vercel.app/)
+[Bingo](https://bingo-mike.vercel.app/)
 
 ## Getting Started
 
