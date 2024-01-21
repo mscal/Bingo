@@ -1,4 +1,4 @@
-import { Button, Grid, Stack } from "@chakra-ui/react";
+import { Button, Grid, Stack, Text } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
 import ClearBoardDialog from "./clear-board-dialog";
 import ShareBoard from "./share-board";
@@ -6,12 +6,14 @@ import Tile from "./tile";
 import WelcomeMessage from "./welcome-message";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/router";
+import { RepeatIcon } from "@chakra-ui/icons";
 
 const BingoGrid = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const share = searchParams.get("share");
   const isInitialRender = useRef(true);
+  const [sharedState, setSharedState] = useState(false);
 
   //initial setup
   const initialGrid = Array(25).fill(undefined);
@@ -49,6 +51,7 @@ const BingoGrid = () => {
   //check for share in url using search params & load that data
   useEffect(() => {
     if (share) {
+      setSharedState(!sharedState);
       const parsedJson = JSON.parse(share);
       if (parsedJson) {
         setAllNumbers(parsedJson?.numberState || initialGrid);
@@ -101,11 +104,13 @@ const BingoGrid = () => {
   function handleClear() {
     setSelectedState(Array(25).fill(false));
     generateNumbers(24);
+    setSharedState(false);
     router.replace("/bingo-game", undefined, { shallow: true });
   }
 
   return (
     <Stack>
+      {sharedState && <Text color={"green.200"}>This is a shared board</Text>}
       <WelcomeMessage />
       <Grid
         templateColumns="repeat(5, 1fr)"
@@ -133,7 +138,12 @@ const BingoGrid = () => {
         {areTilesSelected() ? (
           <ClearBoardDialog onConfirm={() => handleClear()} />
         ) : (
-          <Button onClick={() => generateNumbers(24)}>Generate Numbers</Button>
+          <Button
+            onClick={() => generateNumbers(24)}
+            rightIcon={<RepeatIcon />}
+          >
+            Generate Board
+          </Button>
         )}
         <ShareBoard
           numberState={allNumbers}

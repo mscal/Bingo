@@ -1,9 +1,7 @@
-import Head from "next/head";
-import { Inter } from "next/font/google";
-import styles from "@/styles/Home.module.css";
-import { Container, Flex, Grid, GridItem, Input } from "@chakra-ui/react";
-import BingoGrid from "@/components/bingo-grid";
 import NameInput from "@/components/name-input";
+import { Container } from "@chakra-ui/react";
+import { Inter } from "next/font/google";
+import Head from "next/head";
 
 const inter = Inter({ subsets: ["latin"] });
 

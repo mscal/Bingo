@@ -1,3 +1,4 @@
+import { RepeatIcon } from "@chakra-ui/icons";
 import {
   AlertDialog,
   AlertDialogBody,
@@ -23,8 +24,9 @@ export default function ClearBoardDialog({
       <Button
         colorScheme="red"
         onClick={onOpen}
+        rightIcon={<RepeatIcon />}
       >
-        Clear & Regenerate Numbers
+        Clear & Regenerate Board
       </Button>
 
       <AlertDialog

@@ -1,3 +1,4 @@
+import { LinkIcon } from "@chakra-ui/icons";
 import { Button, useClipboard, useToast } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
@@ -38,7 +39,14 @@ const ShareBoard = ({ numberState, selectionState }: ShareStates) => {
     });
   }
 
-  return <Button onClick={handleCopy}>Share Bingo Board</Button>;
+  return (
+    <Button
+      onClick={handleCopy}
+      rightIcon={<LinkIcon />}
+    >
+      Share Bingo Board
+    </Button>
+  );
 };
 
 export default ShareBoard;
