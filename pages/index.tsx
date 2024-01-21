@@ -2,10 +2,15 @@ import NameInput from "@/components/name-input";
 import { Container } from "@chakra-ui/react";
 import { Inter } from "next/font/google";
 import Head from "next/head";
+import { useEffect } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
+  useEffect(() => {
+    localStorage.clear();
+  }, []);
+
   return (
     <>
       <Head>

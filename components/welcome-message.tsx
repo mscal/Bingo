@@ -7,7 +7,10 @@ export default function WelcomeMessage() {
 
   useEffect(() => {
     const nameStorage = localStorage?.getItem("name");
-    setName(`Hi ${nameStorage} - Ready to play?` || "Hi - Ready to play?");
+    setName(
+      `Hi ${nameStorage ?? "Stranger"} - Ready to play?` ||
+        "Hi Stranger - Ready to play?"
+    );
   }, []);
 
   return (
