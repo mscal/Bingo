@@ -1,5 +1,4 @@
 import { GridItem } from "@chakra-ui/react";
-import { useState } from "react";
 
 export default function Tile({
   tileValue,

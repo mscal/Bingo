@@ -1,5 +1,5 @@
 import { Button, Grid, Stack } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ClearBoardDialog from "./clear-board-dialog";
 import ShareBoard from "./share-board";
 import Tile from "./tile";
@@ -11,6 +11,7 @@ const BingoGrid = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const share = searchParams.get("share");
+  const isInitialRender = useRef(true);
 
   //initial setup
   const initialGrid = Array(25).fill(undefined);
@@ -26,6 +27,26 @@ const BingoGrid = () => {
     return selectedState.some((selected) => selected === true);
   }
 
+  //load function from storage
+  const loadBoardStateFromLocalStorage = () => {
+    if (typeof window !== "undefined") {
+      const storedItems = localStorage.getItem("board-state");
+      if (storedItems) {
+        return JSON.parse(storedItems);
+      }
+    }
+  };
+
+  //check for load from storage and set values
+  useEffect(() => {
+    const getLoadState = loadBoardStateFromLocalStorage();
+    if (getLoadState) {
+      setAllNumbers(getLoadState.numberState);
+      setSelectedState(getLoadState.selectionState);
+    }
+  }, []);
+
+  //check for share in url using search params & load that data
   useEffect(() => {
     if (share) {
       const parsedJson = JSON.parse(share);
@@ -35,6 +56,20 @@ const BingoGrid = () => {
       }
     }
   }, [share]);
+
+  // update local storage when state changes after initial render
+  useEffect(() => {
+    if (isInitialRender.current) {
+      isInitialRender.current = false;
+    } else {
+      let combinedStates = {
+        numberState: allNumbers,
+        selectionState: selectedState,
+      };
+      const json = JSON.stringify(combinedStates);
+      localStorage.setItem("board-state", json);
+    }
+  }, [allNumbers, selectedState]);
 
   //Generates new set of numbers & updates grid list
   function generateNumbers(gridItems: number) {
@@ -94,15 +129,17 @@ const BingoGrid = () => {
           );
         })}
       </Grid>
-      {areTilesSelected() ? (
-        <ClearBoardDialog onConfirm={() => handleClear()} />
-      ) : (
-        <Button onClick={() => generateNumbers(24)}>Generate Numbers</Button>
-      )}
-      <ShareBoard
-        numberState={allNumbers}
-        selectionState={selectedState}
-      />
+      <Stack mt={1}>
+        {areTilesSelected() ? (
+          <ClearBoardDialog onConfirm={() => handleClear()} />
+        ) : (
+          <Button onClick={() => generateNumbers(24)}>Generate Numbers</Button>
+        )}
+        <ShareBoard
+          numberState={allNumbers}
+          selectionState={selectedState}
+        />
+      </Stack>
     </Stack>
   );
 };
